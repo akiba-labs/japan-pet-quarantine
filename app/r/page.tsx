@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Calculator, VERDICT_LABEL } from "@/components/calculator";
+import { Calculator } from "@/components/calculator";
+import { VERDICT_LABEL } from "@/lib/verdict";
 import { EXAMPLE_SHARED, PUBLIC_URL, isIndexable, ogPath, parseShared, resultPath, safeCheck } from "@/lib/share";
 import { DISCLAIMER_SHORT, HONESTY } from "@/lib/site";
 

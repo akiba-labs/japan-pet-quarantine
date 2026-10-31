@@ -5,23 +5,10 @@ import { CardDisclaimer } from "@/components/card-disclaimer";
 import { ShareBar } from "@/components/share-bar";
 import { DESIGNATED_CODES, type Direction, type Species } from "@/lib/pet";
 import { EXAMPLE_SHARED, PUBLIC_URL, resultPath, safeCheck, type Shared } from "@/lib/share";
+import { VERDICT_LABEL, VERDICT_STYLE } from "@/lib/verdict";
 
 const field = "mt-2 w-full rounded-xl border border-line bg-black/40 px-3 py-2 text-sm text-foreground focus:border-amber";
 
-export const VERDICT_STYLE: Record<string, string> = {
-  on_track: "text-teal-200",
-  plan: "text-amber-200",
-  quarantine_risk: "text-amber-200",
-  deadline_passed: "text-red-300",
-  redo_required: "text-red-300",
-};
-export const VERDICT_LABEL: Record<string, string> = {
-  on_track: "On track",
-  plan: "Plan",
-  quarantine_risk: "Detention risk",
-  deadline_passed: "Deadline passed",
-  redo_required: "Fix a step",
-};
 const STATUS: Record<string, string> = { ok: "✓", invalid: "✗", missing: "…", todo: "→", info: "i" };
 const STATUS_STYLE: Record<string, string> = { ok: "text-teal-200", invalid: "text-red-300", missing: "text-muted", todo: "text-amber-200", info: "text-muted" };
 
