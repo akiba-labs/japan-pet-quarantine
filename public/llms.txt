@@ -1,0 +1,51 @@
+# Japan Pet Quarantine Check
+
+> Free, unofficial date checker for bringing a dog or cat into Japan, taking it out of Japan, or leaving Japan and coming back, from the MAFF Animal Quarantine Service (AQS, 動物検疫所) rules. Non-designated regions (most countries: US mainland, UK, EU, Canada, Asia): microchip → rabies shot #1 at 91+ days old → #2 30+ days later → blood draw at a MAFF-designated lab (≥0.5 IU/ml, valid 2 years) → arrival 180+ days after the draw; 40-day advance notice; vet check within 10 days before boarding; early arrival = detention for the missing days. Designated regions (Iceland, Australia, New Zealand, Fiji, Hawaii, Guam): no vaccine / wait. Export: apply 14+ days ahead, mandatory for dogs and rabbits exported from 2027-01-01. Rules as of 2026-10-31. Educational, not veterinary or legal advice; not affiliated with MAFF or AQS.
+
+Site: https://japan-pet-quarantine.vercel.app
+
+## Key facts (official sources below)
+- Microchip: ISO 11784/11785, 15 digits, implanted on or before the first counted rabies shot. Chips starting 900202 are currently not accepted; some 900-prefix numbers (900113, 900115, 900128, 900201, 900215, 900217, 900263…) were duplicated: notify AQS early.
+- Rabies shot #1: 91+ days old (birth = day 0), after the chip; inactivated or recombinant vaccine only (no live / RNA). Shot #2: 30+ days after #1 (#1 = day 0) and within #1's effective period (duration of immunity). Boosters must stay inside each shot's effective period or everything restarts.
+- Antibody test: blood drawn on or after the day of shot #2, within the vaccine's effective period, tested at a MAFF-designated lab, ≥0.5 IU/ml, valid 2 years from the draw.
+- 180-day wait: arrival 180+ days after the passing blood draw (draw = day 0). Early arrival: detention at AQS for the remaining days, at the importer's cost; no medical exceptions. Arrival must also fall within the antibody validity and vaccine effective period.
+- Advance notification: to the AQS office at the arrival port at least 40 days before arrival (NACCS or email). Later notices are in principle not accepted; arrival cannot be moved earlier after notifying.
+- Before boarding: clinical inspection within 10 days (rabies; dogs also leptospirosis) + government-endorsed certificate (Form AC; Form AB for designated regions).
+- Dogs enter only via 19 ports: airports New Chitose, Narita, Haneda, Chubu, Kansai, Itami, Kobe, Kitakyushu, Fukuoka, Kagoshima, Naha; seaports Tomakomai, Keihin, Nagoya, Hanshin, Kanmon, Hakata, Kagoshima, Naha.
+- After import: register the dog with the city within 30 days with the import quarantine certificate; yearly rabies shot. Keep the certificate (no reissue; needed to export).
+- Designated regions: microchip + residence (since birth, 180+ days immediately before export, or since coming directly from Japan; otherwise detention for 180 minus days resident) + 40-day notice + Form AB + direct transport or seal / ANNEX.
+- Export from Japan: apply for export inspection 14+ days before (NACCS / email); inspection within 10 days before departure. From 2027-01-01 mandatory for dogs and rabbits (家畜伝染病予防法施行規則 amendment); cats asked to do the same. Rabbits imported as cargo from 2027-01-01: 40-day import notification mandatory.
+- Short stay abroad: do chip, 2 shots and the antibody test in Japan before leaving → no 180-day wait abroad, ≤12 h quarantine on return within 2 years of the draw (boosters abroad on time).
+
+## API (free, no key, CORS open)
+
+### GET
+GET https://japan-pet-quarantine.vercel.app/api/check?direction=import&species=dog&country=US&birthDate=2026-03-01&microchipDate=2026-06-10&vaccine1Date=2026-06-10&vaccine2Date=2026-07-20&bloodDrawDate=2026-08-05&titer=2.1&arrivalDate=2027-01-20&today=2026-10-31
+→ verdict "quarantine_risk", summary "Arriving 2027-01-20 means about 12 days of detention in Japan; arrive from 2027-02-01 to avoid it.", dates {earliestArrival "2027-02-01", notifyAqsBy "2026-12-11", antibodyValidUntil "2028-08-05", preDepartureInspectionFrom/To, registerDogBy}, quarantine {expected "12 days", days 12}, steps[{step, date, status, rule}], actions, warnings, ports, sources, disclaimer
+
+### POST
+POST https://japan-pet-quarantine.vercel.app/api/check
+{"direction":"export","species":"dog","departureDate":"2027-01-10","today":"2026-10-31"}
+→ verdict "on_track", dates.exportApplyBy "2026-12-27", exportApplication.mandatory true, exportInspectionFrom "2026-12-31"
+
+Parameters: direction (import | export | return), species (dog | cat | rabbit), country (import: ISO code or name; IS, AU, NZ, FJ, Hawaii, Guam → designated), origin (other | designated), birthDate, microchipDate, microchipNumber (format check only), vaccine1Date, vaccine1ValidUntil, vaccine2Date, vaccineValidUntil, bloodDrawDate, titer (IU/ml), residentSince / residentSinceBirth (designated), arrivalDate, departureDate, today. Leave out the prep dates to get fastestPlan.
+
+Verdicts: on_track | plan (prep incomplete; see fastestPlan) | quarantine_risk (arrival before 180 days / residence short) | deadline_passed (40-day notice or 14-day export application missed) | redo_required (a step is invalid).
+
+Bad input → 400 {error, docs, example, disclaimer}: missing / invalid direction or species, invalid dates, dates before birth, missing arrivalDate after a blood draw, missing departureDate for export / return.
+
+### Other endpoints
+- GET https://japan-pet-quarantine.vercel.app/api/rules
+- https://japan-pet-quarantine.vercel.app/openapi.json
+- https://japan-pet-quarantine.vercel.app/.well-known/ai-plugin.json
+- MCP: tool japan_pet_quarantine_check on https://free-agent-tools.vercel.app/mcp
+
+## Sources (official)
+- https://www.maff.go.jp/aqs/english/animal/dog/import-other.html (AQS: import from non-designated regions)
+- https://www.maff.go.jp/aqs/english/animal/dog/import-free.html (AQS: designated regions)
+- https://www.maff.go.jp/aqs/english/animal/dog/export.html (AQS: export from Japan)
+- https://www.maff.go.jp/aqs/animal/dog/shortstay.html (AQS: 犬、猫の旅行・短期滞在編, updated 2026-08-04)
+- https://www.maff.go.jp/aqs/animal/index.html (AQS notices: 14-day export application for dogs and rabbits and rabbit import notification from 2027-01-01)
+- https://www.maff.go.jp/aqs/english/qanda/dogcata.html (AQS FAQ: detention days, antibody re-test)
+- https://www.maff.go.jp/aqs/animal/dog/lab.html (MAFF-designated antibody labs)
+- https://laws.e-gov.go.jp/law/411M50000200068 (犬等の輸出入検疫規則, e-Gov)
