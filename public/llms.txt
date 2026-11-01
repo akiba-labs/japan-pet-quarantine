@@ -49,3 +49,24 @@ Bad input → 400 {error, docs, example, disclaimer}: missing / invalid directio
 - https://www.maff.go.jp/aqs/english/qanda/dogcata.html (AQS FAQ: detention days, antibody re-test)
 - https://www.maff.go.jp/aqs/animal/dog/lab.html (MAFF-designated antibody labs)
 - https://laws.e-gov.go.jp/law/411M50000200068 (犬等の輸出入検疫規則, e-Gov)
+
+## Other free tools by the same maker
+- Japan Re-entry Deadline Check (last day to be back in Japan: deemed re-entry, re-entry permit, renewal-pending special period): https://japan-reentry-check.vercel.app
+- Japan Customs Allowance Checker (duty-free allowance on arrival, duty estimate, cash declaration): https://japan-customs-allowance.vercel.app
+- Japan Luggage Check (Shinkansen oversized-baggage rule + luggage forwarding cost): https://japan-luggage.vercel.app
+- Japan My Number Card Expiry Check (foreign residents' card ends with the period of stay): https://japan-mynumber-card-check.vercel.app
+- Japan Visa Fee Calculator (residence permit fees from 2026-10-01): https://japan-visa-fee.vercel.app
+- Japan PR Guideline Check (permanent residence guideline revised 2026-10-01): https://japan-pr-check.vercel.app
+- Japan HSP Points Calculator (Highly Skilled Professional visa points, 70 / 80): https://japan-hsp-points.vercel.app
+- Japan Overseas Dependents Check (国外居住親族 dependent deduction): https://japan-overseas-dependents.vercel.app
+- Japan Part-time Work Check (資格外活動許可, 28-hour rule): https://japan-parttime-check.vercel.app
+- Japan Driving Check (foreign licence, IDP, 外免切替): https://japan-driving-check.vercel.app
+- Japan International Postage 2027 (Japan Post prices now vs from 2027-02-01): https://japan-intl-postage.vercel.app
+- Japan Tax-Free Refund Checker (refund-method tax-free shopping from 2026-11-01): https://japan-tax-free-refund.vercel.app
+- Japan TB Screening Check (JPETS TB clearance for COE / visa): https://japan-tb-screening.vercel.app
+- Japan Alert Decoder (Japanese emergency alerts explained): https://japan-alert-decoder.vercel.app
+- Japan Dual Pricing Check (resident vs non-resident prices): https://japan-dual-pricing.vercel.app
+- Kyushu Travel Discount Calculator (九州ふっこう応援割): https://kyushu-travel-discount.vercel.app
+- House Rules Check (Airbnb house rules from 2026-11-20): https://house-rules-check.vercel.app
+- Japan Trip Brain (Japan trip planner): https://japan-trip-brain.vercel.app
+- Free Agent Tools MCP (all these tools as one MCP server): https://free-agent-tools.vercel.app
