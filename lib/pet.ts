@@ -59,6 +59,9 @@ export function validDate(s: string): boolean {
 }
 const toDate = (s: string) => new Date(`${s}T00:00:00Z`);
 const fmt = (d: Date) => d.toISOString().slice(0, 10);
+/** Rough designated-lab turnaround used for the short-stay route (AQS: leave once the result notice is in hand). */
+export const LAB_DAYS_ABOUT = 21;
+
 export function addDays(s: string, n: number): string {
   const d = toDate(s);
   d.setUTCDate(d.getUTCDate() + n);
@@ -342,7 +345,7 @@ export function checkPet(input: CheckInput): CheckResult {
     const pBlood = maxDate(pV2, start);
     const pArr = isReturn ? null : maxDate(addDays(pBlood, 180), addDays(start, 40));
     plan = {
-      microchip: pChip, vaccine1: pV1, vaccine2: pV2, bloodDraw: pBlood, readyToDepartAbout: isReturn ? maxDate(addDays(pBlood, 21), addDays(start, 14)) : null, earliestArrival: pArr, notifyAqsBy: pArr ? addDays(pArr, -40) : null,
+      microchip: pChip, vaccine1: pV1, vaccine2: pV2, bloodDraw: pBlood, readyToDepartAbout: isReturn ? maxDate(addDays(pBlood, LAB_DAYS_ABOUT), addDays(start, 14)) : null, earliestArrival: pArr, notifyAqsBy: pArr ? addDays(pArr, -40) : null,
       note: isReturn
         ? "Fastest order if you start now: all of this in Japan before departure, then leave once the lab result (≥0.5 IU/ml) is in hand (readyToDepartAbout assumes about 3 weeks for the lab; ask your vet). No 180-day wait abroad; return within 2 years of the draw."
         : "Fastest legal timeline if you start now: arrival 180 days after a passing blood draw (draw = day 0). Lab turnaround and vet availability add time; the 180 days cannot be shortened, even for medical reasons.",
@@ -356,6 +359,7 @@ export function checkPet(input: CheckInput): CheckResult {
     if (today > dates.exportApplyBy!) late = true;
     if (blood && blood > dep) { redo = true; warnings.push(`The blood draw (${blood}) is after the departure (${dep}). For the short-stay route, the antibody result must be in hand before the pet leaves Japan.`); }
     if (!blood && plan && plan.readyToDepartAbout && plan.readyToDepartAbout > dep) warnings.push(`Probably not enough time: with a blood draw on ${plan.bloodDraw} the lab result would arrive around ${plan.readyToDepartAbout}, after the planned departure ${dep}. Move the departure, or the pet will need the full 180-day procedure abroad before coming back.`);
+    if (blood && blood <= dep && addDays(blood, LAB_DAYS_ABOUT) > dep && (input.titer === null || input.titer === undefined)) warnings.push(`The blood draw (${blood}) is less than about 3 weeks before the ${dep} departure. AQS lets the pet leave only once the designated lab's result notice (≥0.5 IU/ml) is in hand, and it is checked at the export inspection: confirm the lab will return it in time, or move the departure.`);
     steps.push({ step: "Apply for the export inspection in Japan", date: dates.exportApplyBy, status: today > dates.exportApplyBy! ? "invalid" : "todo", rule: `14+ days before leaving; attach chip, 2 vaccine and antibody certificates. ${exportApplication.rule}` });
     steps.push({ step: "Export inspection in Japan (export quarantine certificate, keep a copy)", date: `${dates.exportInspectionFrom} → ${dates.exportInspectionTo}`, status: "todo", rule: "Within 10 days before departure." });
     if (target) {
@@ -457,6 +461,8 @@ export function checkPet(input: CheckInput): CheckResult {
     if (v === "redo_required") return `A step does not meet the AQS rules: fix it before travelling, or the ${sp} faces up to 180 days' detention.${plan ? ` Fastest redo: arrival from ${plan.earliestArrival}.` : ""}`;
     if (v === "deadline_passed") return `Too late for this date: ${dates.notifyAqsBy && today > dates.notifyAqsBy ? `the 40-day AQS notice was due by ${dates.notifyAqsBy}. Choose an arrival on or after ${addDays(today, 40)}.` : `the export-inspection application was due by ${dates.exportApplyBy}.`}`;
     if (v === "quarantine_risk") return `Arriving ${arrival} means about ${shortfall} days of detention in Japan${dates.earliestArrival ? `; arrive from ${dates.earliestArrival} to avoid it` : ""}.`;
+    if (direction === "return" && v === "plan" && plan?.readyToDepartAbout && departure && plan.readyToDepartAbout > departure)
+      return `Not enough time before the ${departure} departure: the fastest blood draw is ${plan.bloodDraw} and the lab result arrives around ${plan.readyToDepartAbout}, and AQS lets the ${sp} leave only once the result is in hand. Leave on or after ${plan.readyToDepartAbout}, or the ${sp} needs the full 180-day procedure abroad before coming back.`;
     if (direction === "return") return v === "plan"
       ? `Do chip, 2 rabies shots and the antibody test in Japan before ${departure}${plan ? ` (fastest: draw ${plan.bloodDraw}, result around ${plan.readyToDepartAbout})` : ""}; then ≤12 h quarantine on return. Export application by ${dates.exportApplyBy}.`
       : `Short-stay route on track: export application by ${dates.exportApplyBy}${dates.notifyAqsBy ? `, AQS notice by ${dates.notifyAqsBy} for the ${arrival} return` : ""}; ≤12 h quarantine if documents are complete.`;

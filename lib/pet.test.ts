@@ -101,6 +101,26 @@ test("return: short-stay route", () => {
   assert.ok(plan.warnings.some((w) => /not enough time/i.test(w)));
 });
 
+test("return: antibody result must be in hand before departure (AQS 短期滞在編)", () => {
+  // fastest plan whose lab result lands after departure: summary must not promise the short-stay route
+  const tight = checkPet({ direction: "return", species: "dog", departureDate: "2026-12-01", today: "2026-11-02" });
+  assert.equal(tight.verdict, "plan");
+  assert.equal(tight.fastestPlan!.readyToDepartAbout, "2026-12-23");
+  assert.match(tight.summary, /^Not enough time before the 2026-12-01 departure/);
+  assert.match(tight.summary, /Leave on or after 2026-12-23/);
+  // enough time: unchanged wording
+  const ok = checkPet({ direction: "return", species: "dog", departureDate: "2027-03-01", today: "2026-11-02" });
+  assert.match(ok.summary, /^Do chip, 2 rabies shots/);
+  // blood drawn 5 days before departure, no titer given: warn
+  const base = { direction: "return" as const, species: "cat" as const, microchipDate: "2026-09-01", vaccine1Date: "2026-09-01", vaccine2Date: "2026-10-05", vaccineValidUntil: "2027-10-05", departureDate: "2026-11-30", today: "2026-11-02" };
+  const near = checkPet({ ...base, bloodDrawDate: "2026-11-25" });
+  assert.equal(near.verdict, "on_track");
+  assert.ok(near.warnings.some((w) => /result notice/.test(w)));
+  // titer given (result in hand) or draw 3+ weeks before: no warning
+  assert.ok(!checkPet({ ...base, bloodDrawDate: "2026-11-25", titer: 1.2 }).warnings.some((w) => /result notice/.test(w)));
+  assert.ok(!checkPet({ ...base, bloodDrawDate: "2026-10-05" }).warnings.some((w) => /result notice/.test(w)));
+});
+
 test("rabbit import: 40-day notice only", () => {
   const r = checkPet({ direction: "import", species: "rabbit", arrivalDate: "2027-02-20", today: T });
   assert.equal(r.dates.notifyAqsBy, "2027-01-11");
