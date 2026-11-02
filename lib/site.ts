@@ -9,6 +9,7 @@ export const HONESTY =
   "Rules as of 2026-10-31 from the MAFF Animal Quarantine Service (import from designated / other regions, export, short stays abroad, the 2027-01-01 notices) and 犬等の輸出入検疫規則. It only uses the dates you enter; it can't see your certificates, your lab result or the destination country's rules.";
 
 export const SIBLING_TOOLS = [
+  { href: "https://japan-leaving-tax.vercel.app", label: "Japan Leaving Tax Check" },
   { href: "https://japan-customs-allowance.vercel.app", label: "Japan Customs Allowance" },
   { href: "https://japan-luggage.vercel.app", label: "Japan Luggage Check" },
   { href: "https://japan-reentry-check.vercel.app", label: "Japan Re-entry Deadline Check" },

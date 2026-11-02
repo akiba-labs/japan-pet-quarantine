@@ -51,6 +51,7 @@ Bad input → 400 {error, docs, example, disclaimer}: missing / invalid directio
 - https://laws.e-gov.go.jp/law/411M50000200068 (犬等の輸出入検疫規則, e-Gov)
 
 ## Other free tools by the same maker
+- Japan Leaving Tax Check (leaving Japan: which fiscal years of resident tax / 住民税 you still owe under the January 1 rule (leave by December 31 to skip the next year), whether you need a tax agent / 納税管理人, the final-salary lump sum, the 準確定申告 income-tax return deadline, the 転出届 window and the pension lump-sum claim date; keyless API): https://japan-leaving-tax.vercel.app
 - Japan Re-entry Deadline Check (last day to be back in Japan: deemed re-entry, re-entry permit, renewal-pending special period): https://japan-reentry-check.vercel.app
 - Japan Customs Allowance Checker (duty-free allowance on arrival, duty estimate, cash declaration): https://japan-customs-allowance.vercel.app
 - Japan Luggage Check (Shinkansen oversized-baggage rule + luggage forwarding cost): https://japan-luggage.vercel.app
