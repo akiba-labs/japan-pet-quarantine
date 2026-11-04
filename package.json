@@ -9,7 +9,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --import tsx --test lib/pet.test.ts lib/api.test.ts lib/share.test.ts"
+    "test": "node --import tsx --test lib/pet.test.ts lib/api.test.ts lib/share.test.ts lib/mobile.test.ts"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

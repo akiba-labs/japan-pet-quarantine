@@ -50,6 +50,8 @@ body::before {
 #app-root {
   position: relative;
   z-index: 1;
+  /* long URLs (API examples, source links) wrap instead of widening the page on phones */
+  overflow-wrap: anywhere;
 }
 
 ::selection {
