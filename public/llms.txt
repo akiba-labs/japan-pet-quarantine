@@ -56,6 +56,7 @@ Bad input → 400 {error, docs, example, disclaimer}: missing / invalid directio
 - Japan Lost Item Check (lost a wallet, phone, passport or residence card in Japan: who to contact first (station, Tokyo Metro, JR, taxi, airport, police), what to stop right away, how long found items are kept under 遺失物法 (3 months; umbrellas and clothing 2 weeks), the 5–20% finder's reward and the 14-day residence card reissue deadline; keyless API): https://japan-lost-item.vercel.app
 - Japan High-Cost Medical Expense Check (高額療養費 monthly cap, refund, 多数回該当, Aug–Jul annual cap, Aug 2027 band change, 2-year claim deadline; keyless API): https://japan-medical-cost-cap.vercel.app
 - Japan Job Loss Check (after quitting or being let go: ISA 14-day organisation notice, 3-month inactivity risk, Hello Work 雇用保険 waiting/restriction, 任意継続 vs 国保, pension switch, documents; keyless API): https://japan-job-loss.vercel.app
+- Japan Visa Renewal Window Check (when your 在留期間更新 window opens: 3 months before expiry, last day, 2-month 特例期間 while ISA decides, 2026-10-01 fees by period, PR/HSP card validity renewal; keyless API): https://japan-visa-renewal.vercel.app
 - Japan Re-entry Deadline Check (last day to be back in Japan: deemed re-entry, re-entry permit, renewal-pending special period): https://japan-reentry-check.vercel.app
 - Japan Customs Allowance Checker (duty-free allowance on arrival, duty estimate, cash declaration): https://japan-customs-allowance.vercel.app
 - Japan Luggage Check (Shinkansen oversized-baggage rule + luggage forwarding cost): https://japan-luggage.vercel.app
