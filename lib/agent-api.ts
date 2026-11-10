@@ -231,7 +231,7 @@ export function aiPluginManifest(base: string, o: { name: string; nameForModel: 
     api: { type: "openapi", url: `${base}/openapi.json`, is_user_authenticated: false },
     logo_url: o.logo.startsWith("http") ? o.logo : `${base}${o.logo}`,
     legal_info_url: `${base}/legal/disclaimer`,
-    contact_url: "https://github.com/sean0007",
+    contact_url: "https://github.com/akiba-labs",
   };
 }
 
