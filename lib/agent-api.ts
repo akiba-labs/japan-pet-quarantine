@@ -48,10 +48,14 @@ export async function readInput(req: Request): Promise<Input> {
         const text = await req.text();
         if (text.trim()) {
           const body = JSON.parse(text);
-          if (body && typeof body === "object" && !Array.isArray(body)) Object.assign(out, body);
+          if (!body || typeof body !== "object" || Array.isArray(body)) {
+            throw new InputError('Body must be a JSON object like {"key": "value"}, not an array, string, number or null.');
+          }
+          Object.assign(out, body);
         }
       }
-    } catch {
+    } catch (e) {
+      if (e instanceof InputError) throw e;
       throw new InputError("Body must be a JSON object (Content-Type: application/json).");
     }
   }
