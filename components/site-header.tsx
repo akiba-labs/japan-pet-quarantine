@@ -8,6 +8,11 @@ const links = [
   { href: "/legal/disclaimer", label: "Disclaimer" },
 ] as const;
 
+function currentPath(pathname: string): string {
+  if (pathname.length > 1 && pathname.endsWith("/")) return pathname.slice(0, -1);
+  return pathname;
+}
+
 export function SiteHeader() {
   const pathname = usePathname();
   return (
@@ -19,7 +24,7 @@ export function SiteHeader() {
         </Link>
         <nav aria-label="Primary" className="flex flex-wrap items-center gap-1 text-sm text-muted sm:gap-2">
           {links.map((link) => {
-            const active = pathname === link.href;
+            const active = currentPath(pathname) === link.href;
             return (
               <Link
                 key={link.href}

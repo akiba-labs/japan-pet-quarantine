@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { API_PAUSED_NOTE, isGithubPages } from "@/lib/hosting";
 import { DISCLAIMER_SHORT, HONESTY, SIBLING_TOOLS } from "@/lib/site";
 
 const links = [
@@ -7,7 +8,7 @@ const links = [
   { href: "/openapi.json", label: "OpenAPI" },
   { href: "/llms.txt", label: "llms.txt" },
   { href: "/legal/disclaimer", label: "Disclaimer" },
-] as const;
+].filter((link) => !isGithubPages || (link.href !== "/api/rules" && link.href !== "/openapi.json"));
 
 export function SiteFooter() {
   return (
@@ -15,6 +16,7 @@ export function SiteFooter() {
       <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-8 text-sm text-muted">
         <p className="max-w-3xl leading-relaxed">{DISCLAIMER_SHORT}</p>
         <p className="max-w-3xl leading-relaxed">{HONESTY}</p>
+        {isGithubPages ? <p>{API_PAUSED_NOTE}</p> : null}
         <div className="flex flex-wrap gap-x-5 gap-y-2">
           {links.map((link) => (
             <Link key={link.href} href={link.href} className="hover:text-foreground">

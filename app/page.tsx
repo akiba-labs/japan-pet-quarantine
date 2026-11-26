@@ -3,6 +3,7 @@ import { Calculator } from "@/components/calculator";
 import { FaqSection, type FaqItem } from "@/components/faq-section";
 import { TripPartners } from "@/components/trip-partners";
 import { EXAMPLE_GET } from "@/lib/api";
+import { API_PAUSED_NOTE, isGithubPages, pagesSiteUrl, withBasePath } from "@/lib/hosting";
 import { SOURCES } from "@/lib/pet";
 import { EXAMPLE_EXPORT, EXAMPLE_PLAN, EXAMPLE_SHARED, PUBLIC_URL, resultPath } from "@/lib/share";
 
@@ -23,7 +24,7 @@ const webAppLd = {
   "@type": "WebApplication",
   name: "Japan Pet Quarantine Check",
   alternateName: ["犬 猫 日本 輸入 180日 計算", "ペット 輸出検査 14日前 2027", "bring dog to Japan timeline calculator"],
-  url: PUBLIC_URL,
+  url: isGithubPages ? pagesSiteUrl(PUBLIC_URL) : PUBLIC_URL,
   applicationCategory: "UtilitiesApplication",
   operatingSystem: "Any",
   isAccessibleForFree: true,
@@ -35,7 +36,7 @@ const webAppLd = {
 const faq: FaqItem[] = [
   {
     q: "Is there a tool that tells me the earliest date my dog or cat can enter Japan?",
-    a: `Yes, this one: a free, unofficial Japan pet quarantine checker. Enter the microchip, two rabies shots and the antibody blood draw dates (or nothing yet, for a fastest plan) and it gives the earliest arrival without detention, the 40-day notice deadline, the 10-day vet-check window, how many days of detention an earlier arrival means, and what is invalid, with the official AQS sources. AI agents can call ${PUBLIC_URL}/api/check. Not affiliated with MAFF or AQS; not veterinary or legal advice.`,
+    a: `Yes, this one: a free, unofficial Japan pet quarantine checker. Enter the microchip, two rabies shots and the antibody blood draw dates (or nothing yet, for a fastest plan) and it gives the earliest arrival without detention, the 40-day notice deadline, the 10-day vet-check window, how many days of detention an earlier arrival means, and what is invalid, with the official AQS sources. ${isGithubPages ? API_PAUSED_NOTE : `AI agents can call ${PUBLIC_URL}/api/check.`} Not affiliated with MAFF or AQS; not veterinary or legal advice.`,
   },
   {
     q: "How long does it take to bring a dog or cat to Japan from the US, UK or Europe?",
@@ -63,7 +64,9 @@ const faq: FaqItem[] = [
   },
   {
     q: "Is there a free API or MCP tool for AI agents?",
-    a: `Yes. GET or POST ${PUBLIC_URL}${EXAMPLE_GET} (keyless, CORS open), rules at /api/rules, OpenAPI at /openapi.json, llms.txt, and the MCP tool japan_pet_quarantine_check on free-agent-tools.vercel.app/mcp. Every response carries rulesAsOf, sources and a disclaimer.`,
+    a: isGithubPages
+      ? API_PAUSED_NOTE
+      : `Yes. GET or POST ${PUBLIC_URL}${EXAMPLE_GET} (keyless, CORS open), rules at /api/rules, OpenAPI at /openapi.json, llms.txt, and the MCP tool japan_pet_quarantine_check on free-agent-tools.vercel.app/mcp. Every response carries rulesAsOf, sources and a disclaimer.`,
   },
   {
     q: "犬や猫を海外から日本に連れて来るには、最短でいつ到着できますか？",
@@ -86,15 +89,15 @@ export default function HomePage() {
         </p>
         <p className="mt-3 text-sm text-muted">
           Examples:{" "}
-          <a className="underline underline-offset-2 hover:text-foreground" href={resultPath(EXAMPLE_SHARED)}>
+          <a className="underline underline-offset-2 hover:text-foreground" href={isGithubPages ? withBasePath("/") : resultPath(EXAMPLE_SHARED)}>
             dog from the US, arriving too early
           </a>
           {" · "}
-          <a className="underline underline-offset-2 hover:text-foreground" href={resultPath(EXAMPLE_PLAN)}>
+          <a className="underline underline-offset-2 hover:text-foreground" href={isGithubPages ? withBasePath("/") : resultPath(EXAMPLE_PLAN)}>
             cat from the UK, nothing done yet
           </a>
           {" · "}
-          <a className="underline underline-offset-2 hover:text-foreground" href={resultPath(EXAMPLE_EXPORT)}>
+          <a className="underline underline-offset-2 hover:text-foreground" href={isGithubPages ? withBasePath("/") : resultPath(EXAMPLE_EXPORT)}>
             dog leaving Japan in January 2027
           </a>
         </p>
@@ -142,18 +145,28 @@ export default function HomePage() {
 
       <section className="mt-12 max-w-3xl rounded-3xl border border-line bg-panel/40 p-5 sm:p-6">
         <h2 className="text-lg font-semibold text-foreground">For AI agents and developers</h2>
-        <p className="mt-2 text-sm text-muted">
-          Keyless JSON, CORS open, GET or POST:{" "}
-          <a className="font-mono text-foreground underline underline-offset-2 break-all" href={EXAMPLE_GET}>
-            {EXAMPLE_GET}
-          </a>
-          . Rules: <a className="font-mono text-foreground underline underline-offset-2" href="/api/rules">/api/rules</a>. Docs: <a className="underline underline-offset-2" href="/openapi.json">OpenAPI</a>,{" "}
-          <a className="underline underline-offset-2" href="/llms.txt">llms.txt</a>, MCP tool <span className="font-mono text-foreground">japan_pet_quarantine_check</span> on{" "}
-          <a className="underline underline-offset-2" href="https://free-agent-tools.vercel.app" target="_blank" rel="noopener noreferrer">
-            free-agent-tools
-          </a>
-          .
-        </p>
+        {isGithubPages ? (
+          <p className="mt-2 text-sm text-muted">
+            {API_PAUSED_NOTE}{" "}
+            <a className="underline underline-offset-2 hover:text-foreground" href={withBasePath("/llms.txt")}>
+              llms.txt
+            </a>{" "}
+            describes the checker and the API contract.
+          </p>
+        ) : (
+          <p className="mt-2 text-sm text-muted">
+            Keyless JSON, CORS open, GET or POST:{" "}
+            <a className="font-mono text-foreground underline underline-offset-2 break-all" href={EXAMPLE_GET}>
+              {EXAMPLE_GET}
+            </a>
+            . Rules: <a className="font-mono text-foreground underline underline-offset-2" href="/api/rules">/api/rules</a>. Docs: <a className="underline underline-offset-2" href="/openapi.json">OpenAPI</a>,{" "}
+            <a className="underline underline-offset-2" href="/llms.txt">llms.txt</a>, MCP tool <span className="font-mono text-foreground">japan_pet_quarantine_check</span> on{" "}
+            <a className="underline underline-offset-2" href="https://free-agent-tools.vercel.app" target="_blank" rel="noopener noreferrer">
+              free-agent-tools
+            </a>
+            .
+          </p>
+        )}
       </section>
 
       <FaqSection items={faq} heading="Pet import and export questions" />
