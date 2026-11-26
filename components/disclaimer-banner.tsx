@@ -1,3 +1,4 @@
+import { withBasePath } from "@/lib/hosting";
 import { DISCLAIMER_SHORT } from "@/lib/site";
 
 export function DisclaimerBanner() {
@@ -9,7 +10,7 @@ export function DisclaimerBanner() {
       <p className="mx-auto max-w-5xl text-[13px] font-medium leading-snug text-amber-100 sm:text-sm">
         {DISCLAIMER_SHORT}{" "}
         <a
-          href="/legal/disclaimer"
+          href={withBasePath("/legal/disclaimer")}
           className="underline decoration-amber/70 underline-offset-2 hover:text-white"
         >
           Full disclaimer
